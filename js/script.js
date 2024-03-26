@@ -121,6 +121,59 @@ if(TestimonialsSwiper())
 }
 
 
+// js code for all products swiper
+function allProductsSwiper()
+{
+  var swiper = new Swiper(".our-products-section-swiper", {
+    slidesPerView: 4,
+    spaceBetween: 30,
+    loop:true,
+    freeMode: true,
+      autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    breakpoints:
+    {
+     1850:
+      {
+        slidesPerView:5,
+      },
+      1520:
+      {
+        slidesPerView:4,
+      },
+      1150:
+      {
+        slidesPerView:3,
+      },
+      800:
+      {
+        slidesPerView:2,
+      },
+      300:
+      {
+        slidesPerView:1,
+      }
+    }
+  });
+}
+
+if(allProductsSwiper())
+{
+  allProductsSwiper();
+}
+
+
+
 // js code for toggle menu
 let menuToggle = document.querySelector('.menuToggle');
 let menuUL = document.querySelector('header ul');
