@@ -121,56 +121,56 @@ if(TestimonialsSwiper())
 }
 
 
-// js code for all products swiper
-function allProductsSwiper()
-{
-  var swiper = new Swiper(".our-products-section-swiper", {
-    slidesPerView: 4,
-    spaceBetween: 30,
-    loop:true,
-    freeMode: true,
-      autoplay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
-    navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev",
-    },
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    breakpoints:
-    {
-     1850:
-      {
-        slidesPerView:5,
-      },
-      1520:
-      {
-        slidesPerView:4,
-      },
-      1150:
-      {
-        slidesPerView:3,
-      },
-      800:
-      {
-        slidesPerView:2,
-      },
-      300:
-      {
-        slidesPerView:1,
-      }
-    }
-  });
-}
+// // js code for all products swiper
+// function allProductsSwiper()
+// {
+//   var swiper = new Swiper(".our-products-section-swiper", {
+//     slidesPerView: 4,
+//     spaceBetween: 30,
+//     loop:true,
+//     freeMode: true,
+//       autoplay: {
+//       delay: 4000,
+//       disableOnInteraction: false,
+//     },
+//     navigation: {
+//       nextEl: ".swiper-button-next",
+//       prevEl: ".swiper-button-prev",
+//     },
+//     pagination: {
+//       el: ".swiper-pagination",
+//       clickable: true,
+//     },
+//     breakpoints:
+//     {
+//      1850:
+//       {
+//         slidesPerView:5,
+//       },
+//       1520:
+//       {
+//         slidesPerView:4,
+//       },
+//       1150:
+//       {
+//         slidesPerView:3,
+//       },
+//       800:
+//       {
+//         slidesPerView:2,
+//       },
+//       300:
+//       {
+//         slidesPerView:1,
+//       }
+//     }
+//   });
+// }
 
-if(allProductsSwiper())
-{
-  allProductsSwiper();
-}
+// if(allProductsSwiper())
+// {
+//   allProductsSwiper();
+// }
 
 
 
@@ -202,7 +202,7 @@ if(productpreviewSwiper())
 }
 
 
-// js code for all products swiper
+// // js code for all products swiper
 function productSuggestionSwiper()
 {
   var swiper = new Swiper(".our-products-section-swiper-suggetion", {
@@ -282,4 +282,88 @@ if(smallImgesBoxes && previewImage)
     })
     
   })
+}
+
+// js code for pagination products 
+
+function paginationFunction()
+{
+  function getPageList(totalPages, page, maxLength)
+	{
+		function range(start, end)
+		{
+			return Array.from(Array(end - start + 1), (_, i)=> i + start);	
+		}
+
+		var sideWidth = maxLength < 9 ? 1 : 2;
+		var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+		var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+
+		if(totalPages <= maxLength)
+		{
+			return range(1, totalPages);
+		}
+
+		if(page <= maxLength - sideWidth - 1 - rightWidth)
+		{
+			return range(1, maxLength - sideWidth -1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+		}
+
+		if(page >= totalPages - sideWidth - 1 - rightWidth)
+		{
+			return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+		}
+
+		return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+	}
+
+	$(function(){
+		var numberOfItems = $('.our-products-section-slide').length;
+		var limitPerPage = 8;
+		var totalPages = Math.ceil(numberOfItems / limitPerPage);
+		var paginationSize = 7; //how many page elements visible in the pagination
+		var currentPage;
+
+		function showPage(whichPage)
+		{
+			if(whichPage < 1 || whichPage > totalPages) return false;
+			currentPage = whichPage;
+
+			$('.our-products-section-slide').hide().slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage).show();
+
+			$('.pagination li').slice(1, -1).remove();
+
+			getPageList(totalPages, currentPage, paginationSize).forEach(item=>{
+				$("<li>").addClass("page-item").addClass(item ? "current-page" : "dots").toggleClass("active", item === currentPage).append($("<a>").addClass('page-link').attr({href: "javascript:void(0)"}).text(item || "...")).insertBefore(".next-page")
+			});
+
+			$(".previous-page").toggleClass("disable", currentPage === 1);
+			$(".next-page").toggleClass("disable", currentPage === totalPages);
+			return true;
+		}
+
+		$(".pagination").append(
+			$("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({href:"javascript:void(0)"}).text("Prev")),
+			$("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({href:"javascript:void(0)"}).text("Next")),
+			);
+
+		$(".our-products-section-swiper-wrapper").show();
+		showPage(1);
+
+		$(document).on("click", ".pagination li.current-page:not(.active)",function(){
+			return showPage(+$(this).text());
+		});
+
+		$(".next-page").on("click",function(){
+			return showPage(currentPage + 1);
+		});
+		$(".previous-page").on("click",function(){
+			return showPage(currentPage - 1);
+		});
+	});
+}
+
+if(paginationFunction())
+{
+  paginationFunction();
 }
