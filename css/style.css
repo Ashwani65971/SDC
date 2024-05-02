@@ -61,7 +61,7 @@ header
 header .logo img
 {
     width: 150px;
-    filter: saturate(150%) drop-shadow(2px 2px 1px rgba(0, 0, 0, 0.8));
+    /* filter: saturate(150%) drop-shadow(0.3px 0.3px 0 white); */
 }
 header ul li
 {
